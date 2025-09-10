@@ -5,7 +5,9 @@ import 'package:flutter_basics/data/profile_data.dart';
 import 'package:flutter_basics/models/profile_info.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({super.key, required this.onInfoItemSelection});
+
+  final void Function(String infoItem) onInfoItemSelection;
 
   @override
   State<ProfileScreen> createState() {
@@ -16,7 +18,9 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   var currentInfoIndex = 0;
 
-  void itemClick() {
+  void itemClick(String selectedInfoItem) {
+    widget.onInfoItemSelection(selectedInfoItem);
+
     setState(() {
       currentInfoIndex++;
     });
@@ -42,7 +46,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // StyledButton(text: currentInfo.infoItems[1], buttonListener: () {}),
             // StyledButton(text: currentInfo.infoItems[2], buttonListener: () {}),
             ...currentInfo.getShuffledList().map((item) {
-              return StyledButton(text: item, buttonListener: itemClick);
+              return StyledButton(text: item, buttonListener: () {
+                itemClick(item);
+              });
             }),
           ],
         ),

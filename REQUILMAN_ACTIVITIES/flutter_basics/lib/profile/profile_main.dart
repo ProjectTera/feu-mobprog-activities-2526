@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_basics/data/profile_data.dart';
 import 'package:flutter_basics/profile/profile_screen.dart';
+import 'package:flutter_basics/profile/profile_summary.dart';
 import 'package:flutter_basics/start_screen.dart';
 
 class ProfileMain extends StatefulWidget {
@@ -9,7 +11,6 @@ class ProfileMain extends StatefulWidget {
   State<ProfileMain> createState() {
     return _ProfileMainState();
   }
-
 }
 
 class _ProfileMainState extends State<ProfileMain> {
@@ -27,12 +28,31 @@ class _ProfileMainState extends State<ProfileMain> {
   //   });
   // }
 
+  final List<String> selectedInfo = [];
   var activeScreen = 'start-screen';
 
   void switchScreen() {
     setState(() {
+      selectedInfo.clear();
       activeScreen = 'profile-screen';
     });
+  }
+
+  void goToHome() {
+    setState(() {
+      selectedInfo.clear();
+      activeScreen = 'start-screen';
+    });
+  }
+
+  void addSelectedInfoItem(String infoItem) {
+    selectedInfo.add(infoItem);
+
+    if (selectedInfo.length >= profileData.length) {
+      setState(() {
+        activeScreen = 'summary-screen';
+      });
+    }
   }
 
   @override
@@ -40,7 +60,15 @@ class _ProfileMainState extends State<ProfileMain> {
     Widget currentScreen = StartScreen(switchScreen);
 
     if (activeScreen == 'profile-screen') {
-      currentScreen = ProfileScreen();
+      currentScreen = ProfileScreen(
+        onInfoItemSelection: addSelectedInfoItem,
+      );
+    } else if (activeScreen == 'summary-screen') {
+      currentScreen = ProfileSummary(
+        selectedInfo: selectedInfo,
+        retakeProfile: switchScreen,
+        goToHome: goToHome,
+      );
     }
 
     return MaterialApp(
