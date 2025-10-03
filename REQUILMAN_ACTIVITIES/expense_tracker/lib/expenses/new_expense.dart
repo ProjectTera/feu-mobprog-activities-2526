@@ -18,7 +18,7 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
-  DateTime? _selectedDate;
+  DateTime? _selectedDate = DateTime.now();
   Category _selectedCategory = Category.food;
 
   void _submitExpenseData() {
@@ -55,22 +55,34 @@ class _NewExpenseState extends State<NewExpense> {
     widget.addExpense(newExpense);
 
     showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text('Expense Saved'),
-          content: Text('Expense with the following data has been saved. \nTitle: ${newExpense.title} \nAmount: ${newExpense.amount}'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                Navigator.pop(context);
-              },
-              child: Text('OK'),
-            ),
-          ],
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'Expense Saved',
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      );
-      return;
+        content: Text(
+          'Expense with the following data has been saved.'
+          '\nTitle: ${newExpense.title}'
+          '\nCategory: ${newExpense.category.name.toUpperCase()}'
+          '\nAmount: ${newExpense.amount}'
+          '\nDate: ${newExpense.date}',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+              Navigator.pop(context);
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+    return;
   }
 
   void _presentDatePicker() async {
@@ -106,6 +118,7 @@ class _NewExpenseState extends State<NewExpense> {
             controller: _titleController,
             maxLength: 50,
             keyboardType: TextInputType.text,
+            style: Theme.of(context).textTheme.titleMedium,
             decoration: InputDecoration(
               label: Text('Title'),
             ),
@@ -117,6 +130,7 @@ class _NewExpenseState extends State<NewExpense> {
                 child: TextField(
                   controller: _amountController,
                   keyboardType: TextInputType.number,
+                  style: Theme.of(context).textTheme.titleMedium,
                   decoration: InputDecoration(
                     prefixText: '\$ ',
                     label: Text('Amount'),
